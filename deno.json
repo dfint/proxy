@@ -1,0 +1,14 @@
+{
+  "lock": false,
+  "tasks": {
+    "dev": "deno run -A --watch --unstable-kv ./src/main.ts"
+  },
+  "imports": {
+    "@nhttp/nhttp": "jsr:@nhttp/nhttp@^0.0.6"
+  },
+  "deploy": {
+    "project": "9ee966b7-7dbc-43be-b096-7ac614d776ca",
+    "include": ["./src/**", "deno.json"],
+    "entrypoint": "./src/main.ts"
+  }
+}
