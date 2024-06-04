@@ -75,10 +75,25 @@ app.get("/download/metadata/:manifest", counter, async (rev) => {
   return res.body;
 });
 
-app.get("/download/installer/win", (rev) => {
-  return rev.respondWith(
-    Response.redirect("https://github.com/dfint/installer/releases/download/0.3.1/dfint-installer-win-0.3.1.zip"),
+app.get("/download/installer/:os", counter, async (rev) => {
+  if (rev.params.os !== "win" && rev.params.os !== "lin") {
+    throw new HttpError(404);
+  }
+
+  const res = await fetch("https://api.github.com/repos/dfint/installer/releases/latest");
+  if (!res.ok) {
+    throw new HttpError(404);
+  }
+  const data = await res.json();
+
+  const asset = data.assets.find((item: { name: string; browser_download_url: string }) =>
+    rev.params.os === "win" ? item.name.endsWith(".zip") : item.name.endsWith("tar.gz"),
   );
+  if (!asset) {
+    throw new HttpError(404);
+  }
+
+  return rev.respondWith(Response.redirect(asset.browser_download_url));
 });
 
 app.listen(6969, () => {
