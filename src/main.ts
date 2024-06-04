@@ -75,6 +75,12 @@ app.get("/download/metadata/:manifest", counter, async (rev) => {
   return res.body;
 });
 
+app.get("/download/installer/win", (rev) => {
+  return rev.respondWith(
+    Response.redirect("https://github.com/dfint/installer/releases/download/0.3.1/dfint-installer-win-0.3.1.zip"),
+  );
+});
+
 app.listen(6969, () => {
   console.log("> Running on port 6969");
 });
